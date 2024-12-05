@@ -1,6 +1,7 @@
 import { yekan } from "@/utils/fonts";
 import "./globals.css";
-import Layout from "@/layout/layout";
+import { Toaster } from "react-hot-toast";
+import Layout from "@/layout/Layout";
 
 export const metadata = {
   title: "Real estate",
@@ -11,7 +12,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fa" dir="rtl">
       <body className={yekan.className}>
-        <Layout>{children}</Layout>
+        <Layout>
+          {children}
+          <Toaster />
+        </Layout>
       </body>
     </html>
   );
