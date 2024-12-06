@@ -81,17 +81,7 @@ export async function PATCH(req) {
             );
         }
 
-        if (
-            !_id ||
-            !title ||
-            !location ||
-            !description ||
-            !phone ||
-            !realState ||
-            !price ||
-            !constructionDate ||
-            !category
-        ) {
+        if (!_id || !title || !location || !description || !phone || !realState || !price || !constructionDate || !category) {
             return NextResponse.json(
                 { error: "لطفا اطلاعات معتبر وارد کنید" },
                 { status: 400 }
@@ -100,12 +90,7 @@ export async function PATCH(req) {
 
         const profile = await Profile.findOne({ _id });
         if (!user._id.equals(profile.userId)) {
-            return NextResponse.json(
-                {
-                    error: "دستری شما به این آگهی محدود شده است",
-                },
-                { status: 403 }
-            );
+            return NextResponse.json({ error: "دسترسی شما به این آگهی محدود شده است" }, { status: 403 });
         }
 
         profile.title = title;
@@ -120,19 +105,9 @@ export async function PATCH(req) {
         profile.category = category;
         profile.save();
 
-        return NextResponse.json(
-            {
-                message: "آگهی با موفقیت ویرایش شد",
-            },
-            {
-                status: 200,
-            }
-        );
+        return NextResponse.json({ message: "آگهی با موفقیت ویرایش شد" }, { status: 200 });
     } catch (err) {
         console.log(err);
-        return NextResponse.json(
-            { error: "مشکلی در سرور رخ داده است" },
-            { status: 500 }
-        );
+        return NextResponse.json({ error: "مشکلی در سرور رخ داده است" }, { status: 500 });
     }
 }

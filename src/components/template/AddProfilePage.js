@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import styles from "./AddProfilePage.module.css"
 import TextInput from "@/module/TextInput"
 import RadioList from "@/module/RadioList"
@@ -8,9 +8,10 @@ import TextList from "@/module/TextList"
 import CustomDatePicker from "@/module/CustomDatePicker"
 import toast from "react-hot-toast"
 import { ThreeDots } from "react-loader-spinner"
+import { useRouter } from "next/navigation"
 
-const AddProfilePage = () => {
-
+const AddProfilePage = ({ data }) => {
+    const router = useRouter()
     const [profileData, setProfileData] = useState({
         title: "",
         description: "",
@@ -25,6 +26,11 @@ const AddProfilePage = () => {
     })
 
     const [loading, setLoading] = useState(false)
+
+    useEffect(() => {
+        if (data) setProfileData(data)
+    }, [])
+
     const submitHandler = async () => {
         setLoading(true)
         const res = await fetch("/api/profile", {
@@ -38,11 +44,31 @@ const AddProfilePage = () => {
             toast.error(data.error)
         } else {
             toast.success(data.message)
+            router.refresh()
+        }
+    }
+
+    const editHandler = async () => {
+        setLoading(true)
+        const res = await fetch("/api/profile", {
+            method: "PATCH",
+            body: JSON.stringify(profileData),
+            headers: { "Content-Type": "application/json" }
+        })
+        const data = res.json()
+        setLoading(false)
+
+        if (data.error) {
+            toast.error(data.error)
+        } else {
+            toast.success(data.message)
+            router.refresh()
         }
 
     }
+
     return <div className={styles.container}>
-        <h3> ثبت آگهی </h3>
+        <h3>{data ? "ویرایش آگهی" : "ثبت آگهی"}</h3>
         <TextInput title="عنوان آگهی" name="title" profileData={profileData} setProfileData={setProfileData} />
         <TextInput title="توضیحات" name="description" profileData={profileData} setProfileData={setProfileData} textarea={true} />
         <TextInput title="آدرس" name="location" profileData={profileData} setProfileData={setProfileData} />
@@ -58,7 +84,9 @@ const AddProfilePage = () => {
                 ariaLabel="three-dots-loading"
                 visible={true}
                 wrapperStyle={{ margin: "auto" }}
-                height={45} /> : <button className={styles.submit} onClick={submitHandler}>ثبت آگهی</button>
+                height={45} /> : data ?
+                <button className={styles.submit} onClick={editHandler}> ویرایش آگهی </button> :
+                <button className={styles.submit} onClick={submitHandler}> ثبت آگهی </button>
         }
     </div>
 }

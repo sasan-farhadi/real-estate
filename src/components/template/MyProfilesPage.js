@@ -5,7 +5,7 @@ const MyProfilesPage = ({ profiles }) => {
         <div>
             {profiles.length ? null : <p className={styles.text}> هیچ آگهی ثبت نشده است </p>}
             {profiles.map(x => (
-                <DashboardCard key={x._id} data={x} />
+                <DashboardCard key={x._id} data={JSON.parse(JSON.stringify(x))} />
             ))}
         </div>
     )
