@@ -1,10 +1,10 @@
 import styles from "./RadioList.module.css"
 
-const RadioList = ({ profielData, setProfileData }) => {
-    const { category } = profielData
+const RadioList = ({ profileData, setProfileData }) => {
+    const { category } = profileData
     const changeHandler = (e) => {
         const { name, value } = e.target
-        setProfileData({ ...profielData, [name]: value })
+        setProfileData({ ...profileData, [name]: value })
     }
     return (
         <div className={styles.container}>
