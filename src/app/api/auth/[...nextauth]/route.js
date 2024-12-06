@@ -4,7 +4,7 @@ import User from "@/models/User";
 import { verifyPassword } from "@/utils/auth";
 import connectDB from "@/utils/connectDB";
 
-const authOptions = {
+export const authOptions = {
     sesstion: { strategy: "jwt" },
     providers: [CredentialsProvider({
         async authorize(credentials) {
